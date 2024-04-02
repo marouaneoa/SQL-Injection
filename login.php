@@ -1,72 +1,85 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-// Include the database connection file
-include 'connection.php';
-
-// Start session to store user data
+/* Initialize the session */
 session_start();
 
-// Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = $login_err = "";
+/* Check if the user is already logged in, if yes then redirect him to welcome page */
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)
+{
+    header("location: home.php");
+    exit;
+}
 
-// Process form submission when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate username
-    if (empty(trim($_POST["username"]))) {
-        $username_err = "Please enter a username.";
-    } else {
+/* Include config file */
+require_once "connection.php";
+
+/* Define variables and initialize with empty values */
+$username = $password = "";
+$username_err = $password_err = "";
+
+/* Processing form data when form is submitted */
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+
+    /* Check if username is empty */
+    if (empty(trim($_POST["username"])))
+    {
+        $username_err = "Please enter username.";
+    }
+    else
+    {
         $username = trim($_POST["username"]);
     }
 
-    // Validate password
-    if (empty(trim($_POST["password"]))) {
-        $password_err = "Please enter a password.";
-    } else {
+    /* Check if password is empty */
+    if (empty(trim($_POST["password"])))
+    {
+        $password_err = "Please enter your password.";
+    }
+    else
+    {
         $password = trim($_POST["password"]);
     }
 
-    // Check input errors before authenticating
-    if (empty($username_err) && empty($password_err)) {
-        // SQL injection vulnerability: directly concatenate user input into SQL query
-        $sql = "SELECT id, username, password FROM users WHERE username = '$username' AND password = '$password";
-        echo $sql; // For demonstration purposes
+    /* Validate credentials */
+    if (empty($username_err) && empty($password_err))
+    {
+        /* Prepare a sql query statement */
+        $sql = "SELECT id, username FROM users WHERE username = '$username' and password = md5('$password')";
 
-        // Attempt to execute the SQL query
-        $result = $conn->query($sql);
+        $result = mysqli_query($link, $sql);
 
-        if ($result->num_rows == 1) {
-            // Fetch result row
-            $row = $result->fetch_assoc();
+        if (mysqli_num_rows($result) > 0)
+        {
+            session_start();
 
-            // Start a new session and store user data
+            /* Store data in session variables */
             $_SESSION["loggedin"] = true;
-            $_SESSION["id"] = $row["id"];
-            $_SESSION["username"] = $row["username"];
+            $_SESSION["id"] = $id;
+            $_SESSION["username"] = $username;
 
-            // Redirect to home page after successful login
+            /* Redirect user to welcome page */
             header("location: home.php");
-            exit; // Ensure no further code execution after redirection
-        } else {
-            // Display an error message if login fails
-            $login_err = "Invalid username or password.";
         }
+        else
+        {
+            /* Display an error message if there is no row selected. */
+            $password_err = "The password you entered was not valid.";
+        }
+        /* Close statement */
+        mysqli_close($link);
     }
-
-    // Close connection
-    $conn->close();
 }
 ?>
-
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <style>
-        .wrapper {width: 360px; padding: 20px;}
+    <link rel="stylesheet" href="assets/bootstrap.css">
+    <style type="text/css">
+        body{ font: 14px sans-serif; }
+        .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>
 <body>
@@ -74,22 +87,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div>
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
-                <input type="text" name="username" value="<?php echo $username; ?>">
-                <span><?php echo $username_err; ?></span>
-            </div>
-            <div>
+                <input type="text" name="username" autocomplete="off" class="form-control" value="<?php echo $username; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>    
+            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
-                <input type="password" name="password">
-                <span><?php echo $password_err; ?></span>
+                <input type="password" name="password" autocomplete="off" class="form-control">
+                <span class="help-block"><?php echo $password_err; ?></span>
             </div>
-            <div>
-                <input type="submit" value="Login">
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Login">
             </div>
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
-            <p><?php echo $login_err; ?></p>
         </form>
-    </div>
+    </div>    
 </body>
 </html>
