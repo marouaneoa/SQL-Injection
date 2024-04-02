@@ -50,11 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
         if (mysqli_num_rows($result) > 0)
         {
+            //Necessary to get the user id
+            $row = mysqli_fetch_assoc($result);
             session_start();
 
             /* Store data in session variables */
             $_SESSION["loggedin"] = true;
-            $_SESSION["id"] = $id;
+            $_SESSION["id"] = $row['id'];
             $_SESSION["username"] = $username;
 
             /* Redirect user to welcome page */
