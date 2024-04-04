@@ -5,7 +5,7 @@ session_start();
 /* Check if the user is already logged in, if yes then redirect him to welcome page */
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)
 {
-    header("location: home.php");
+    header("location: search.php");
     exit;
 }
 
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             $_SESSION["username"] = $username;
 
             /* Redirect user to welcome page */
-            header("location: home.php");
+            header("location: search.php");
         }
         else
         {

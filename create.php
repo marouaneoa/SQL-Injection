@@ -33,9 +33,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <form action="process_form.php" method="post">
     <input type="text" id="note" name="note" placeholder="Note"><br>
     <input type="text" id="url_name" name="url_name" placeholder="URL/Name">
-    <?php if(isset($url_error)) { ?>
-        <p style="color:red;"><?php echo $url_error; ?></p>
-    <?php } ?>
+    <?php if(isset($_SESSION['url_error'])) { ?>
+        <p style="color:red; text-align:left;
+        "><?php echo $_SESSION['url_error']; ?></p>
+    <?php unset($_SESSION['url_error']); } ?>
     <br>
     <div class="pass">
     <input type="text" id="password" name="password" placeholder="Password">
