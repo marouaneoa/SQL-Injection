@@ -1,0 +1,13 @@
+Sql injection for create Password
+1
+* In Create Password we can type as user input in Password ' OR 1/0 --'
+* So this an sql error (devision by 0) and so it will echo it as the following:
+ERROR: Could not execute query: INSERT INTO passwords_for_users (user_id, note, url_name, password) VALUES (1, 'billal', 'billal', '' OR 1/0 --''). Division by 0
+* so now the attacker knows the table name, names of columns and he can generate more powerful sql injection attacks using those inforamtion
+this is an Error sql injection
+
+2
+ff' OR ((SELECT COUNT(*) FROM passwords_for_users) > 9) AND SLEEP(5) ";#
+this will give us information about how many rows on that sepcific table, if it is true the app will take longer time
+to refresh (5 seconds) if it is false it will it will run immediately, we can try it for different values until get the
+right one or we can write a script for it to automate things

@@ -43,6 +43,7 @@ if ($search_query !== '') {
         }
     </script>
 </head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <body>
     <header>
     <div class="header-left">
@@ -59,6 +60,7 @@ if ($search_query !== '') {
             <form action="search.php" method="get">
                 <input type="text" name="search_query" placeholder="Search by Name or URL" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit">Search</button>
+                <a id='addpassword' href="create.php"><i class="bi bi-plus-circle-fill"></i></a>
             </form>
         </div>
         <table>
