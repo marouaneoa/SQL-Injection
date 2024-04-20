@@ -48,22 +48,24 @@ if(isset($_GET['delete']) && isset($_GET['id'])) {
         }
     </script>
 </head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <body>
     <header>
-        <div class="header-left">
-            <img src="assets/img/Security.png" alt="Password Manager Logo">
-            <a href="#">Password Manager</a>
-        </div>
-        <a href="logout.php" class="logout-icon" title="Sign Out of Your Account">
-            <img src="assets/img/logout.png" alt="Logout" class="return-icon">
-        </a>
-    </header>
+    <div class="header-left">
+        <img src="assets/img/Security.png" alt="Password Manager Logo">
+        <a href="#">Password Manager</a>
+    </div>
+    <a href="logout.php" class="logout-icon" title="Sign Out of Your Account">
+        <img src="assets/img/logout.png" alt="Logout" class="return-icon">
+    </a>
+</header>
 
     <main>
         <div class="search-and-add">
             <form action="search.php" method="get">
                 <input type="text" name="search_query" placeholder="Search by Name or URL" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit">Search</button>
+                <a id='addpassword' href="create.php"><i class="bi bi-plus-circle-fill"></i></a>
             </form>
         </div>
         <table>
@@ -88,12 +90,14 @@ if(isset($_GET['delete']) && isset($_GET['id'])) {
                                 <td>
                                     <input type="password" id="<?= $passwordFieldId ?>" value="<?= htmlspecialchars($row['password']); ?>" readonly>
                                     <button type="button" onclick="togglePasswordVisibility('<?= $passwordFieldId ?>')" style="margin-top: 3%; border: none; background-color: #75FFDE; color: black;">View</button>
+
                                 </td>
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <a href='search.php?delete=true&id=<?= $row['id'] ?>&search_query=<?= urlencode($search_query) ?>' onclick='return confirm("Are you sure you want to delete this password?");'>
-                                        <span style='color: red;'>&#10006;</span>
-                                    </a>
-                                </td>
+    <a href='delete_password.php?id=<?= $row['id'] ?>&search_query=<?= urlencode($search_query) ?>' onclick='return confirm("Are you sure you want to delete this password?");'>
+        <span style='color: red;'>&#10006;</span>
+    </a>
+</td>
+
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
