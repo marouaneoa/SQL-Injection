@@ -14,15 +14,20 @@ require_once "connection.php";
 $search_query = isset($_GET['search_query']) ? $_GET['search_query'] : '';
 
 if ($search_query !== '') {
+    $search_query = $_GET['search_query'];
+    $sql = "SELECT * FROM passwords_for_users WHERE url_name LIKE '%" . mysqli_real_escape_string($link, $search_query) . "%'";
+    $result = mysqli_query($link, $sql);
+}
 
+// Handle deletion if the delete parameter is set
+if(isset($_GET['delete']) && isset($_GET['id'])) {
+    $delete_id = mysqli_real_escape_string($link, $_GET['id']);
+    $delete_sql = "DELETE FROM passwords_for_users WHERE id = $delete_id";
+    mysqli_query($link, $delete_sql);
 
-   $sql = "SELECT * FROM passwords_for_users WHERE user_id = ? AND url_name LIKE ?";
-    $stmt = $link->prepare($sql);
-    $search_term = "%{$search_query}%";
-    $stmt->bind_param("is", $_SESSION["id"], $search_term);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
+    // Redirect to the same page to refresh and remove delete parameters from URL
+    header("location: search.php?search_query=" . urlencode($search_query));
+    exit;
 }
 ?>
 
@@ -43,24 +48,22 @@ if ($search_query !== '') {
         }
     </script>
 </head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <body>
     <header>
-    <div class="header-left">
-        <img src="assets/img/Security.png" alt="Password Manager Logo">
-        <a href="#">Password Manager</a>
-    </div>
-    <a href="logout.php" class="logout-icon" title="Sign Out of Your Account">
-        <img src="assets/img/logout.png" alt="Logout" class="return-icon">
-    </a>
-</header>
+        <div class="header-left">
+            <img src="assets/img/Security.png" alt="Password Manager Logo">
+            <a href="#">Password Manager</a>
+        </div>
+        <a href="logout.php" class="logout-icon" title="Sign Out of Your Account">
+            <img src="assets/img/logout.png" alt="Logout" class="return-icon">
+        </a>
+    </header>
 
     <main>
         <div class="search-and-add">
             <form action="search.php" method="get">
                 <input type="text" name="search_query" placeholder="Search by Name or URL" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit">Search</button>
-                <a id='addpassword' href="create.php"><i class="bi bi-plus-circle-fill"></i></a>
             </form>
         </div>
         <table>
@@ -85,14 +88,12 @@ if ($search_query !== '') {
                                 <td>
                                     <input type="password" id="<?= $passwordFieldId ?>" value="<?= htmlspecialchars($row['password']); ?>" readonly>
                                     <button type="button" onclick="togglePasswordVisibility('<?= $passwordFieldId ?>')" style="margin-top: 3%; border: none; background-color: #75FFDE; color: black;">View</button>
-
                                 </td>
                                 <td style="text-align: center; vertical-align: middle;">
-    <a href='delete_password.php?id=<?= $row['id'] ?>&search_query=<?= urlencode($search_query) ?>' onclick='return confirm("Are you sure you want to delete this password?");'>
-        <span style='color: red;'>&#10006;</span>
-    </a>
-</td>
-
+                                    <a href='search.php?delete=true&id=<?= $row['id'] ?>&search_query=<?= urlencode($search_query) ?>' onclick='return confirm("Are you sure you want to delete this password?");'>
+                                        <span style='color: red;'>&#10006;</span>
+                                    </a>
+                                </td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
