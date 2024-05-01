@@ -124,3 +124,7 @@ a {
 a:hover {
     text-decoration: underline;
 }
+#addpassword{
+    font-size: 30px;
+    margin-left: 2%;
+}
