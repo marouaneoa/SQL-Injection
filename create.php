@@ -31,7 +31,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <h1>Create New Password</h1>
 
 <form action="process_form.php" method="post">
-    <input type="text" id="note" name="note" placeholder="Note"><br>
+    <input id="note" name="note" placeholder="Note"><br>
     <input type="text" id="url_name" name="url_name" placeholder="URL/Name">
     <?php if(isset($_SESSION['url_error'])) { ?>
         <p style="color:red; text-align:left;
