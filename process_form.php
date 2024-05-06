@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $url_name = mysqli_real_escape_string($link, $_POST['url_name']);
     $password = mysqli_real_escape_string($link, $_POST['password']);
     $user_id = $_SESSION["id"];
-
+    
     // Check if the combination of url_name and user_id already exists
     $query = "SELECT COUNT(*) AS count FROM passwords_for_users WHERE user_id = ? AND url_name = ?";
     $stmt = mysqli_prepare($link, $query);
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("location: create.php");
         exit;
     } else if($result) {
-        // Use prepared statements to insert data into the database
+        // Use prepared statements to insert data into the database           ')"; $sql = "DROP TABLE one";//
         $sql = "INSERT INTO passwords_for_users (user_id, note, url_name, password) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, "isss", $user_id, $note, $url_name, $password);

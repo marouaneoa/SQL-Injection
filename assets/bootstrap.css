@@ -4,6 +4,8 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+
+
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
@@ -11,6 +13,9 @@ html {
 }
 body {
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 article,
 aside,
