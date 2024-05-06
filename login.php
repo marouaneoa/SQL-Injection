@@ -81,19 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     <link rel="stylesheet" href="assets/bootstrap.css">
     <style type="text/css">
         body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px;  margin-top: 5%;}
-        .custom-btn {
-  background-color: #75FFDE;
-  border-color: #75FFDE;
-}
-
-.custom-btn:hover {
-  background-color: #6CD3C2;
-  border-color: #6CD3C2;
-}
-.green{
-    color: #75FFDE;
-}
+        .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>
 <body>
@@ -112,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
-            <input type="submit" class="btn btn-primary custom-btn" value="Login">
+                <input type="submit" class="btn btn-primary" value="Login">
             </div>
-            <p>Don't have an account? <a href="register.php" class='green'>Sign up now</a>.</p>
+            <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
         </form>
     </div>    
 </body>
