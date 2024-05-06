@@ -44,9 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     if (empty($username_err) && empty($password_err))
     {
         /* Prepare a sql query statement */
-        $sql = "SELECT id, username FROM users WHERE username = '$username' and password = md5('$password')";
+        $stmt = mysqli_prepare($link, "SELECT id, username FROM users WHERE username = ? AND password = MD5(?)");
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-        $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0)
         {
