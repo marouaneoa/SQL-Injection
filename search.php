@@ -14,10 +14,10 @@ require_once "connection.php";
 $search_query = isset($_GET['search_query']) ? $_GET['search_query'] : '';
 
 if ($search_query !== '') {
-    $search_query = $_GET['search_query'];
-    $sql = "SELECT * FROM passwords_for_users WHERE url_name LIKE '%" . mysqli_real_escape_string($link, $search_query) . "%'";
+    $sql = "SELECT * FROM passwords_for_users WHERE url_name LIKE '%" . $search_query . "%'";
     $result = mysqli_query($link, $sql);
 }
+
 
 // Handle deletion if the delete parameter is set
 if(isset($_GET['delete']) && isset($_GET['id'])) {
